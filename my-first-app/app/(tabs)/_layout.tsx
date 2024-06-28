@@ -1,7 +1,13 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
 
-export default function Layout() {
+import { drawerIcon } from "@/components/navigation/TabBarIcon";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
+
+export default function TabLayout() {
+  const colorScheme = useColorScheme();
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer>
@@ -10,6 +16,8 @@ export default function Layout() {
           options={{
             drawerLabel: "Home",
             title: "overview",
+            drawerIcon: ({ color, size }) =>
+              drawerIcon({ name: "home", color, size }),
           }}
         />
         <Drawer.Screen
@@ -17,6 +25,26 @@ export default function Layout() {
           options={{
             drawerLabel: "Explore",
             title: "Explore",
+            drawerIcon: ({ color, size }) =>
+              drawerIcon({ name: "desktop-sharp", color, size }),
+          }}
+        />
+        <Drawer.Screen
+          name="new" // This is the name of the page and must match the url from root
+          options={{
+            drawerLabel: "new",
+            title: "New",
+            drawerIcon: ({ color, size }) =>
+              drawerIcon({ name: "desktop", color, size }),
+          }}
+        />
+        <Drawer.Screen
+          name="start" // This is the name of the page and must match the url from root
+          options={{
+            drawerLabel: "Start",
+            title: "Start",
+            drawerIcon: ({ color, size }) =>
+              drawerIcon({ name: "desktop-outline", color, size }),
           }}
         />
       </Drawer>
