@@ -4,7 +4,42 @@ import { Drawer } from "expo-router/drawer";
 import { drawerIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import CustomDrawerContent from "@/components/navigation/CustomDrawerContent";
+// import CustomDrawerContent from "@/components/navigation/CustomDrawerContent";
+import {
+  DrawerContentScrollView,
+  DrawerItem,
+  DrawerItemList,
+} from "@react-navigation/drawer";
+import { useRouter } from "expo-router";
+import { View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+function CustomDrawerContent(props: any) {
+  const router = useRouter();
+  const { top, bottom } = useSafeAreaInsets();
+  return (
+    <View style={{ flex: 1, backgroundColor: "#dde3fe" }}>
+      <DrawerContentScrollView
+        {...props}
+        scrollEnabled={false}
+        contentContainerStyle={{
+          backgroundColor: "#dde3fe",
+        }}
+      >
+        <DrawerItemList {...props} />
+      </DrawerContentScrollView>
+      <View
+        style={{
+          borderTopColor: "#000000",
+          borderTopWidth: 1,
+          padding: bottom,
+        }}
+      >
+        <DrawerItem label={"Logout"} onPress={() => router.replace("/")} />
+      </View>
+    </View>
+  );
+}
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -14,11 +49,9 @@ export default function TabLayout() {
       <Drawer
         drawerContent={CustomDrawerContent}
         screenOptions={{
-          drawerActiveBackgroundColor: "#5363df",
-          drawerActiveTintColor: "#fff",
-          drawerLabelStyle: {
-            marginLeft: -25,
-          },
+          drawerPosition: "left",
+          drawerHideStatusBarOnOpen: false,
+          swipeEnabled: true,
         }}
       >
         <Drawer.Screen

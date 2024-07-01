@@ -1,10 +1,11 @@
 import { DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { useRouter } from 'expo-router';
 import { View } from 'react-native';
-import { top, bottom } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function CustomDrawerContent(props) {
       const router = useRouter();
+      const { top, bottom } = useSafeAreaInsets();
       return (
             <View style={{ flex: 1, backgroundColor: "#dde3fe", paddingTop: 20 + top }} >
 
