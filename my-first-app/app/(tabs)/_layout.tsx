@@ -47,6 +47,15 @@ export default function TabLayout() {
               drawerIcon({ name: "desktop-outline", color, size }),
           }}
         />
+        <Drawer.Screen
+          name="something" // This is the name of the page and must match the url from root
+          options={{
+            drawerLabel: "Something",
+            title: "Something",
+            drawerIcon: ({ color, size }) =>
+              drawerIcon({ name: "skull-outline", color, size }),
+          }}
+        />
       </Drawer>
     </GestureHandlerRootView>
   );
