@@ -81,6 +81,15 @@ export default function TabLayout() {
               drawerIcon({ name: "person-outline", color, size }),
           }}
         />
+        <Drawer.Screen
+          name="profile" // This is the name of the page and must match the url from root
+          options={{
+            drawerLabel: "profile",
+            title: "profile",
+            drawerIcon: ({ color, size }) =>
+              drawerIcon({ name: "person-outline", color, size }),
+          }}
+        />
       </Drawer>
     </GestureHandlerRootView>
   );
