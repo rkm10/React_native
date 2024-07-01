@@ -14,7 +14,11 @@ export default function TabLayout() {
       <Drawer
         drawerContent={CustomDrawerContent}
         screenOptions={{
-          drawerStatusBarAnimation: "none",
+          drawerActiveBackgroundColor: "#5363df",
+          drawerActiveTintColor: "#fff",
+          drawerLabelStyle: {
+            marginLeft: -25,
+          },
         }}
       >
         <Drawer.Screen
