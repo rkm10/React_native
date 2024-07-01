@@ -4,13 +4,19 @@ import { Drawer } from "expo-router/drawer";
 import { drawerIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import CustomDrawerContent from "@/components/navigation/CustomDrawerContent";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Drawer>
+      <Drawer
+        drawerContent={CustomDrawerContent}
+        screenOptions={{
+          drawerStatusBarAnimation: "none",
+        }}
+      >
         <Drawer.Screen
           name="index" // This is the name of the page and must match the url from root
           options={{
@@ -21,39 +27,21 @@ export default function TabLayout() {
           }}
         />
         <Drawer.Screen
-          name="explore" // This is the name of the page and must match the url from root
+          name="news" // This is the name of the page and must match the url from root
           options={{
-            drawerLabel: "Explore",
-            title: "Explore",
+            drawerLabel: "News",
+            title: "News",
             drawerIcon: ({ color, size }) =>
-              drawerIcon({ name: "desktop-sharp", color, size }),
+              drawerIcon({ name: "newspaper", color, size }),
           }}
         />
         <Drawer.Screen
-          name="new" // This is the name of the page and must match the url from root
+          name="profile" // This is the name of the page and must match the url from root
           options={{
-            drawerLabel: "new",
-            title: "New",
+            drawerLabel: "profile",
+            title: "profile",
             drawerIcon: ({ color, size }) =>
-              drawerIcon({ name: "desktop", color, size }),
-          }}
-        />
-        <Drawer.Screen
-          name="start" // This is the name of the page and must match the url from root
-          options={{
-            drawerLabel: "Start",
-            title: "Start",
-            drawerIcon: ({ color, size }) =>
-              drawerIcon({ name: "desktop-outline", color, size }),
-          }}
-        />
-        <Drawer.Screen
-          name="something" // This is the name of the page and must match the url from root
-          options={{
-            drawerLabel: "Something",
-            title: "Something",
-            drawerIcon: ({ color, size }) =>
-              drawerIcon({ name: "skull-outline", color, size }),
+              drawerIcon({ name: "person-outline", color, size }),
           }}
         />
       </Drawer>
