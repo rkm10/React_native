@@ -11,7 +11,7 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 import { useRouter } from "expo-router";
-import { View } from "react-native";
+import { Image, View, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function CustomDrawerContent(props: any) {
@@ -26,6 +26,34 @@ function CustomDrawerContent(props: any) {
           backgroundColor: "#dde3fe",
         }}
       >
+        <View
+          style={{
+            padding: 10,
+          }}
+        >
+          <Image
+            source={{
+              uri: "https://cdn.pixabay.com/photo/2020/01/16/17/32/pokemon-4771238_1280.jpg",
+            }}
+            style={{
+              width: 100,
+              height: 100,
+              alignSelf: "center",
+              borderRadius: 50,
+            }}
+          />
+          <Text
+            style={{
+              alignSelf: "center",
+              fontWeight: "500",
+              fontSize: 18,
+              paddingTop: 10,
+              color: "#1163d1",
+            }}
+          >
+            Pokemon
+          </Text>
+        </View>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
       <View
@@ -52,6 +80,8 @@ export default function TabLayout() {
           drawerPosition: "left",
           drawerHideStatusBarOnOpen: false,
           swipeEnabled: true,
+          drawerActiveTintColor: "#fff",
+          drawerActiveBackgroundColor: "rgba(0, 122, 255, 1)",
         }}
       >
         <Drawer.Screen
