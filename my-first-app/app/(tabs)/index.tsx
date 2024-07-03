@@ -1,36 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { Image, StyleSheet, ActivityIndicator, View } from "react-native";
-import { Card, CardContent, Pagination, Typography } from "@mui/material";
+import { Image, StyleSheet, Platform, Button } from "react-native";
+
+import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
+import { useNavigation } from "expo-router";
+import { DrawerActions } from "@react-navigation/native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { HelloWave } from "@/components/HelloWave";
+import { useState, useEffect } from "react";
+import { Card, CardContent, Typography } from "@mui/material";
 
 export default function HomeScreen() {
+  const navigation = useNavigation();
+  const openDrawer = () => {
+    navigation.dispatch(DrawerActions.openDrawer());
+  };
+
   const [apiData, setApiData] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    setLoading(true);
-    fetch(
-      `https://pokeapi.co/api/v2/pokemon?limit=10&offset=${(page - 1) * 10}`
-    )
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=10")
       .then((response) => response.json())
-      .then((json) => {
-        setApiData(json.results);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error);
-        setLoading(false);
-      });
-  }, [page]);
-
-  const handlePageChange = (event, value) => {
-    setPage(value);
-  };
+      .then((json) => setApiData(json.results))
+      .catch((error) => setError(error));
+  }, []);
+  console.log(apiData);
 
   return (
     <ParallaxScrollView
@@ -38,45 +32,37 @@ export default function HomeScreen() {
       headerImage={
         <Image
           source={require("@/assets/images/pokemon-logo.png")}
-          style={Style.reactLogo}
+          style={styles.reactLogo}
         />
       }
     >
-      <ThemedView style={Style.titleContainer}>
+      <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome Pokie's.!!!</ThemedText>
         <HelloWave />
       </ThemedView>
-
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : error ? (
-        <ThemedText type="error">
-          Error fetching data: {error.message}
-        </ThemedText>
-      ) : (
-        <View style={Style.cardsContainer}>
-          {apiData.map((data, index) => (
+      <ThemedView style={styles.cardsContainer}>
+        {apiData.map((data, index) => {
+          return (
+            <div key={index} style={{ width: "45%" }}>
+              <Text>{apiData[index].name}</Text>
+            </div>
+          );
+        })}
+        {/* {apiData.map((data, index) => {
+          return (
             <Card key={index} sx={{ width: { xs: "45%" } }}>
               <CardContent>
-                <Typography>Pokemon: {data.name}</Typography>
+                <Typography>Pokemon:{apiData[index].name}</Typography>
               </CardContent>
             </Card>
-          ))}
-        </View>
-      )}
-
-      <Pagination
-        count={10}
-        variant="outlined"
-        shape="rounded"
-        page={page}
-        onChange={handlePageChange}
-      />
+          );
+        })} */}
+      </ThemedView>
     </ParallaxScrollView>
   );
 }
 
-const Style = StyleSheet.create({
+const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
