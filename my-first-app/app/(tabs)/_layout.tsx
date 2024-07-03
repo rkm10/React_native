@@ -48,7 +48,7 @@ function CustomDrawerContent(props: any) {
               fontWeight: "500",
               fontSize: 18,
               paddingTop: 10,
-              color: "#1163d1",
+              color: "#563d1",
             }}
           >
             Pokemon
