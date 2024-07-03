@@ -4,22 +4,22 @@ import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function CustomDrawerContent(props) {
-      const router = useRouter();
-      const { top, bottom } = useSafeAreaInsets();
-      return (
-            <View style={{ flex: 1, backgroundColor: "#dde3fe", paddingTop: 20 + top }} >
+    const router = useRouter();
+    const { top, bottom } = useSafeAreaInsets();
+    return (
+        <View style={{ flex: 1, backgroundColor: "#dde3fe", paddingTop: 20 + top }} >
 
-                  <DrawerContentScrollView {...props}
-                        scrollEnabled={false}
-                        contentContainerStyle={{
-                              backgroundColor: "#dde3fe"
-                              , paddingTop: top, paddingBottom: bottom
-                        }}>
-                        <DrawerItemList {...props} />
-                  </DrawerContentScrollView>
-                  <View style={{ borderTopColor: "#000000", borderTopWidth: 1, padding: 20, paddingBottom: 20 }}>
-                        <DrawerItem label={'Logout'} onPress={() => router.replace('/')} />
-                  </View>
+            <DrawerContentScrollView {...props}
+                scrollEnabled={false}
+                contentContainerStyle={{
+                    backgroundColor: "#dde3fe"
+                    , paddingTop: top, paddingBottom: bottom
+                }}>
+                <DrawerItemList {...props} />
+            </DrawerContentScrollView>
+            <View style={{ borderTopColor: "#000000", borderTopWidth: 1, padding: 20, paddingBottom: 20 }}>
+                <DrawerItem label={'Logout'} onPress={() => router.replace('/')} />
             </View>
-      );
+        </View>
+    );
 }
