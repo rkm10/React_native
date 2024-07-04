@@ -31,7 +31,6 @@ export function ThemedPagination({
 }: ThemedPaginationProps) {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [selectedPage, setSelectedPage] = useState(currentPage);
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const paginationRef = useRef(null);
 
   const backgroundColor = useThemeColor(
@@ -53,11 +52,6 @@ export function ThemedPagination({
 
   const toggleDropdown = () => {
     setIsDropdownVisible(!isDropdownVisible);
-    if (paginationRef.current) {
-      paginationRef.current.measure((fx, fy, width, height, px, py) => {
-        setDropdownPosition({ top: py + height, left: px });
-      });
-    }
   };
 
   const handlePageSelect = (page) => {
@@ -105,15 +99,10 @@ export function ThemedPagination({
 
       {/* Dropdown Icon and Page Info */}
       <TouchableOpacity onPress={toggleDropdown} style={styles.pageInfo}>
-        <Text style={[{ color: textColor, display: "flex" }, styles.text]}>
-          Page {currentPage}
-          <MaterialIcons
-            name="arrow-drop-down"
-            size={24}
-            color={textColor}
-          />{" "}
-          of {totalPages}
+        <Text style={[{ color: textColor }, styles.text]}>
+          Page {currentPage} of {totalPages}
         </Text>
+        <MaterialIcons name="arrow-drop-down" size={24} color={textColor} />
       </TouchableOpacity>
 
       {/* Modal */}
@@ -130,13 +119,7 @@ export function ThemedPagination({
           <View
             style={[
               styles.modalContainer,
-              {
-                backgroundColor,
-                borderColor,
-                borderWidth: 1,
-                top: dropdownPosition.top,
-                left: dropdownPosition.left,
-              },
+              { backgroundColor, borderColor, borderWidth: 1 },
             ]}
           >
             <FlatList
@@ -205,17 +188,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContainer: {
-    position: "absolute",
-    maxHeight: 150,
-    width: 100, // Adjust width as needed
+    position: "static",
+    top: "50%",
+    left: "50%",
+    transform: [{ translateX: -20 }, { translateY: 150 }],
     borderRadius: 4,
+    // padding: 16,
+    maxHeight: 150,
+    width: 50, // Adjust width as needed
+    // backgroundColor: "white",
   },
   dropdownItem: {
     paddingVertical: 10,
     paddingHorizontal: 5,
   },
   selectedDropdownItem: {
-    backgroundColor: "#DDD",
+    // backgroundColor: "#DDD",
   },
   dropdownItemText: {
     fontSize: 16,
