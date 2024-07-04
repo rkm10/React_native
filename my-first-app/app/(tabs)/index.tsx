@@ -47,31 +47,23 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
 
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : error ? (
-        <ThemedText type="error">
-          Error fetching data: {error.message}
-        </ThemedText>
-      ) : (
-        <View style={styles.cardsContainer}>
-          {apiData.map((data, index) => {
-            return (
-              <ThemedView key={index} style={{ width: "45%" }}>
-                <ThemedText>{apiData[index].name}</ThemedText>
-              </ThemedView>
-            );
-          })}
-        </View>
-      )}
+      <ThemedView style={styles.cardsContainer}>
+        {apiData.map((data, index) => {
+          return (
+            <ThemedView key={index} style={{ width: "45%" }}>
+              <ThemedText>{apiData[index].name}</ThemedText>
+            </ThemedView>
+          );
+        })}
+      </ThemedView>
 
-      <Pagination
+      {/* <Pagination
         count={10}
         variant="outlined"
         shape="rounded"
         page={page}
         onChange={handlePageChange}
-      />
+      /> */}
     </ParallaxScrollView>
   );
 }
