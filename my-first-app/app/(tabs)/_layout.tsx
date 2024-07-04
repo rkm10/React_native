@@ -13,6 +13,7 @@ import {
 import { useRouter } from "expo-router";
 import { Image, View, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ThemedView } from "@/components/ThemedView";
 
 function CustomDrawerContent(props: any) {
   const router = useRouter();
@@ -56,7 +57,7 @@ function CustomDrawerContent(props: any) {
         </View>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
-      <View
+      <ThemedView
         style={{
           borderTopColor: "#000000",
           borderTopWidth: 1,
@@ -64,7 +65,7 @@ function CustomDrawerContent(props: any) {
         }}
       >
         <DrawerItem label={"Logout"} onPress={() => router.replace("/")} />
-      </View>
+      </ThemedView>
     </View>
   );
 }

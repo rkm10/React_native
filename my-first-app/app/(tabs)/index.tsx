@@ -1,34 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { Image, StyleSheet, ActivityIndicator, View } from "react-native";
-import { Card, CardContent, Pagination, Typography } from "@mui/material";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { HelloWave } from "@/components/HelloWave";
+import { ThemedPagination } from "@/components/ThemedPagination";
 
 export default function HomeScreen() {
   const [apiData, setApiData] = useState([]);
+  const [currentPageData, setCurrentPageData] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
-    setLoading(true);
-    fetch(
-      `https://pokeapi.co/api/v2/pokemon?limit=10&offset=${(page - 1) * 10}`
-    )
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=1000")
       .then((response) => response.json())
       .then((json) => {
         setApiData(json.results);
+        setTotalPages(Math.ceil(json.results.length / itemsPerPage));
         setLoading(false);
+        setCurrentPageData(json.results.slice(0, itemsPerPage));
       })
       .catch((error) => {
         setError(error);
         setLoading(false);
       });
-  }, [page]);
+  }, []);
 
-  const handlePageChange = (event, value) => {
+  useEffect(() => {
+    if (apiData.length > 0) {
+      const offset = (page - 1) * itemsPerPage;
+      setCurrentPageData(apiData.slice(offset, offset + itemsPerPage));
+    }
+  }, [page, apiData]);
+
+  const handlePageChange = (value) => {
     setPage(value);
   };
 
@@ -47,23 +56,28 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
 
-      <ThemedView style={styles.cardsContainer}>
-        {apiData.map((data, index) => {
-          return (
-            <ThemedView key={index} style={{ width: "45%" }}>
-              <ThemedText>{apiData[index].name}</ThemedText>
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : error ? (
+        <ThemedView style={styles.errorContainer}>
+          <ThemedText>Error fetching data: {error.message}</ThemedText>
+        </ThemedView>
+      ) : (
+        <ThemedView style={styles.cardsContainer}>
+          {currentPageData.map((data, index) => (
+            <ThemedView key={index} style={styles.card}>
+              <ThemedText>{data.name}</ThemedText>
             </ThemedView>
-          );
-        })}
+          ))}
+        </ThemedView>
+      )}
+      <ThemedView style={styles.paginationContainer}>
+        <ThemedPagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </ThemedView>
-
-      {/* <Pagination
-        count={10}
-        variant="outlined"
-        shape="rounded"
-        page={page}
-        onChange={handlePageChange}
-      /> */}
     </ParallaxScrollView>
   );
 }
@@ -73,17 +87,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-  },
-  stepContainer: {
-    marginBottom: 8,
+    padding: 16,
   },
   cardsContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    flex: 2,
+  },
+  card: {
+    width: "45%",
+    margin: 8,
+    padding: 16,
+    borderWidth: 1,
+    borderRadius: 8,
     alignItems: "center",
-    gap: 8,
   },
   reactLogo: {
     height: 250,
@@ -91,5 +108,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: "absolute",
+  },
+  errorContainer: {
+    padding: 16,
+    alignItems: "center",
+  },
+  paginationContainer: {
+    marginTop: 16,
+    alignItems: "center",
   },
 });
