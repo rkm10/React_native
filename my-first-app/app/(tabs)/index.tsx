@@ -14,28 +14,52 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
+  const initialFetchLimit = 50;
 
   useEffect(() => {
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=1000")
-      .then((response) => response.json())
-      .then(async (json) => {
-        const pokemonList = json.results;
-        console.log(pokemonList);
-        const detailedDataPromises = pokemonList.map((pokemon) =>
+    const fetchData = async () => {
+      try {
+        // Fetch the first 50 Pokémon
+        let response = await fetch(
+          `https://pokeapi.co/api/v2/pokemon?limit=${initialFetchLimit}`
+        );
+        let json = await response.json();
+        const firstBatch = json.results;
+
+        const detailedDataPromises = firstBatch.map((pokemon) =>
           fetch(pokemon.url).then((response) => response.json())
         );
-        console.log(detailedDataPromises);
+        const firstBatchDetails = await Promise.all(detailedDataPromises);
 
-        const detailedData = await Promise.all(detailedDataPromises);
-        setApiData(detailedData);
-        setTotalPages(Math.ceil(detailedData.length / itemsPerPage));
+        setApiData(firstBatchDetails);
+        setTotalPages(Math.ceil(1000 / itemsPerPage));
         setLoading(false);
-        setCurrentPageData(detailedData.slice(0, itemsPerPage));
-      })
-      .catch((error) => {
+        setCurrentPageData(firstBatchDetails.slice(0, itemsPerPage));
+
+        // Fetch the remaining Pokémon in the background
+        response = await fetch(
+          `https://pokeapi.co/api/v2/pokemon?offset=${initialFetchLimit}&limit=${
+            1000 - initialFetchLimit
+          }`
+        );
+        json = await response.json();
+        const remainingBatch = json.results;
+
+        const remainingDetailedDataPromises = remainingBatch.map((pokemon) =>
+          fetch(pokemon.url).then((response) => response.json())
+        );
+        const remainingBatchDetails = await Promise.all(
+          remainingDetailedDataPromises
+        );
+
+        setApiData((prevData) => [...prevData, ...remainingBatchDetails]);
+      } catch (error) {
         setError(error);
         setLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -74,9 +98,9 @@ export default function HomeScreen() {
         <ThemedView style={styles.cardsContainer}>
           {currentPageData.map((data, index) => (
             <ThemedView key={index} style={styles.card}>
-              <ThemedText style={{ textTransform: "uppercase" }}>
-                {data.name}
-              </ThemedText>
+              <ThemedText>{data.name}</ThemedText>
+              <ThemedText>Height: {data.height}</ThemedText>
+              <ThemedText>Weight: {data.weight}</ThemedText>
               <Image
                 source={{ uri: data.sprites.front_default }}
                 style={styles.pokemonImage}
