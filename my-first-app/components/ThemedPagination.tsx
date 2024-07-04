@@ -7,7 +7,6 @@ import {
   Modal,
   FlatList,
   type ViewProps,
-  Dimensions,
 } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { MaterialIcons } from "@expo/vector-icons";
