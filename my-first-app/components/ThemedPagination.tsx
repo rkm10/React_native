@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -7,9 +7,10 @@ import {
   Modal,
   FlatList,
   type ViewProps,
+  Dimensions,
 } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { MaterialIcons } from "@expo/vector-icons"; // Import MaterialIcons
+import { MaterialIcons } from "@expo/vector-icons";
 
 export type ThemedPaginationProps = ViewProps & {
   currentPage: number;
@@ -30,6 +31,8 @@ export function ThemedPagination({
 }: ThemedPaginationProps) {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [selectedPage, setSelectedPage] = useState(currentPage);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
+  const paginationRef = useRef(null);
 
   const backgroundColor = useThemeColor(
     { light: lightColor, dark: darkColor },
@@ -50,6 +53,11 @@ export function ThemedPagination({
 
   const toggleDropdown = () => {
     setIsDropdownVisible(!isDropdownVisible);
+    if (paginationRef.current) {
+      paginationRef.current.measure((fx, fy, width, height, px, py) => {
+        setDropdownPosition({ top: py + height, left: px });
+      });
+    }
   };
 
   const handlePageSelect = (page) => {
@@ -78,6 +86,7 @@ export function ThemedPagination({
     <View
       style={[{ backgroundColor }, styles.container, style]}
       {...otherProps}
+      ref={paginationRef}
     >
       <TouchableOpacity
         onPress={() => onPageChange(currentPage - 1)}
@@ -96,24 +105,38 @@ export function ThemedPagination({
 
       {/* Dropdown Icon and Page Info */}
       <TouchableOpacity onPress={toggleDropdown} style={styles.pageInfo}>
-        <Text style={[{ color: textColor }, styles.text]}>
-          Page {currentPage} of {totalPages}
+        <Text style={[{ color: textColor, display: "flex" }, styles.text]}>
+          Page {currentPage}
+          <MaterialIcons
+            name="arrow-drop-down"
+            size={24}
+            color={textColor}
+          />{" "}
+          of {totalPages}
         </Text>
-        <MaterialIcons name="arrow-drop-down" size={24} color={textColor} />
       </TouchableOpacity>
 
       {/* Modal */}
       <Modal
         visible={isDropdownVisible}
         transparent
-        animationType="slide"
+        animationType="none"
         onRequestClose={toggleDropdown}
       >
-        <View style={styles.modalContainer}>
+        <View
+          style={StyleSheet.absoluteFillObject}
+          onStartShouldSetResponder={toggleDropdown}
+        >
           <View
             style={[
-              styles.dropdownContainer,
-              { backgroundColor, width: `${String(currentPage).length * 10}%` }, // Adjust width based on the current page number
+              styles.modalContainer,
+              {
+                backgroundColor,
+                borderColor,
+                borderWidth: 1,
+                top: dropdownPosition.top,
+                left: dropdownPosition.left,
+              },
             ]}
           >
             <FlatList
@@ -121,6 +144,14 @@ export function ThemedPagination({
               renderItem={renderPageItem}
               keyExtractor={(item) => item.toString()}
               initialNumToRender={5}
+              initialScrollIndex={
+                currentPage > 2 ? currentPage - 3 : currentPage - 1
+              } // Start with current page in the middle
+              getItemLayout={(data, index) => ({
+                length: 44,
+                offset: 44 * index,
+                index,
+              })}
               showsVerticalScrollIndicator={false}
             />
           </View>
@@ -154,6 +185,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     borderRadius: 4,
+    padding: 4,
   },
   button: {
     paddingVertical: 8,
@@ -173,20 +205,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
-  },
-  dropdownContainer: {
-    width: "80%",
-    maxHeight: 200,
-    borderRadius: 8,
-    padding: 16,
+    position: "absolute",
+    maxHeight: 150,
+    width: 100, // Adjust width as needed
+    borderRadius: 4,
   },
   dropdownItem: {
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
   },
   selectedDropdownItem: {
     backgroundColor: "#DDD",
