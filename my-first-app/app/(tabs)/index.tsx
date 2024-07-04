@@ -18,11 +18,19 @@ export default function HomeScreen() {
   useEffect(() => {
     fetch("https://pokeapi.co/api/v2/pokemon?limit=1000")
       .then((response) => response.json())
-      .then((json) => {
-        setApiData(json.results);
-        setTotalPages(Math.ceil(json.results.length / itemsPerPage));
+      .then(async (json) => {
+        const pokemonList = json.results;
+        console.log(pokemonList);
+        const detailedDataPromises = pokemonList.map((pokemon) =>
+          fetch(pokemon.url).then((response) => response.json())
+        );
+        console.log(detailedDataPromises);
+
+        const detailedData = await Promise.all(detailedDataPromises);
+        setApiData(detailedData);
+        setTotalPages(Math.ceil(detailedData.length / itemsPerPage));
         setLoading(false);
-        setCurrentPageData(json.results.slice(0, itemsPerPage));
+        setCurrentPageData(detailedData.slice(0, itemsPerPage));
       })
       .catch((error) => {
         setError(error);
@@ -66,7 +74,13 @@ export default function HomeScreen() {
         <ThemedView style={styles.cardsContainer}>
           {currentPageData.map((data, index) => (
             <ThemedView key={index} style={styles.card}>
-              <ThemedText>{data.name}</ThemedText>
+              <ThemedText style={{ textTransform: "uppercase" }}>
+                {data.name}
+              </ThemedText>
+              <Image
+                source={{ uri: data.sprites.front_default }}
+                style={styles.pokemonImage}
+              />
             </ThemedView>
           ))}
         </ThemedView>
@@ -116,5 +130,10 @@ const styles = StyleSheet.create({
   paginationContainer: {
     marginTop: 16,
     alignItems: "center",
+  },
+  pokemonImage: {
+    width: 100,
+    height: 100,
+    marginTop: 8,
   },
 });
