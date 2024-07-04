@@ -64,7 +64,9 @@ export function ThemedPagination({
     <TouchableOpacity
       style={[
         styles.dropdownItem,
-        item === selectedPage && styles.selectedDropdownItem,
+        item === selectedPage && {
+          backgroundColor: "#787078",
+        },
       ]}
       onPress={() => handlePageSelect(item)}
     >
@@ -193,18 +195,14 @@ const styles = StyleSheet.create({
     left: "50%",
     transform: [{ translateX: -20 }, { translateY: 150 }],
     borderRadius: 4,
-    // padding: 16,
     maxHeight: 150,
     width: 50, // Adjust width as needed
-    // backgroundColor: "white",
   },
   dropdownItem: {
     paddingVertical: 10,
     paddingHorizontal: 5,
   },
-  selectedDropdownItem: {
-    // backgroundColor: "#DDD",
-  },
+
   dropdownItemText: {
     fontSize: 16,
   },
