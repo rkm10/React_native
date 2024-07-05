@@ -189,10 +189,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContainer: {
-    position: "static",
-    top: "50%",
-    left: "50%",
-    transform: [{ translateX: -20 }, { translateY: 150 }],
+    position: "absolute",
+    top: "75%",
+    left: "47%",
+    // bottom: -100,
+    // transform: [{ translateX: -20 }, { translateY: 150 }],
     borderRadius: 4,
     maxHeight: 150,
     width: 50, // Adjust width as needed
