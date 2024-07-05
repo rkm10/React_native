@@ -45,7 +45,7 @@ const Details = () => {
         </ThemedView>
     );
 };
-(0, _expoRouter.useSearchParams) is not a function
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
