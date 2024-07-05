@@ -1,10 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
+import { useSearchParams } from 'expo-router';
 
-const Details = ({ route }) => {
-    const { pokemon } = route.params;
+const Details = () => {
+    const { name, url } = useSearchParams();
+    const [pokemon, setPokemon] = useState(null);
+
+    useEffect(() => {
+        const fetchPokemonDetails = async () => {
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                setPokemon(data);
+            } catch (error) {
+                console.error("Error fetching Pokémon details:", error);
+            }
+        };
+
+        if (url) {
+            fetchPokemonDetails();
+        }
+    }, [url]);
+
+    if (!pokemon) {
+        return (
+            <ThemedView style={styles.container}>
+                <ThemedText>Loading...</ThemedText>
+            </ThemedView>
+        );
+    }
 
     return (
         <ThemedView style={styles.container}>

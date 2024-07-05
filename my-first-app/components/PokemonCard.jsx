@@ -7,7 +7,7 @@ import { Link } from "expo-router";
 const PokemonCard = ({ data }) => {
     return (
         <ThemedView style={styles.card}>
-            <Link href={`/user/${data.name}`}>
+            <Link href={`/users/[name]${data.name}&url=${data.url}`}>
                 <ThemedText>{data.name}</ThemedText>
                 <Image
                     source={{ uri: data.sprites.front_default }}

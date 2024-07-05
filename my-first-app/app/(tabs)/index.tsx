@@ -5,8 +5,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { HelloWave } from "@/components/HelloWave";
 import { ThemedPagination } from "@/components/ThemedPagination";
-import { Link } from "expo-router";
-import PokemonCard from "@/components/PokemonCard"; // New Component
+import PokemonCard from "@/components/PokemonCard";
 
 export default function HomeScreen() {
   const [apiData, setApiData] = useState([]);
