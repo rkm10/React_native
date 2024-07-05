@@ -5,6 +5,8 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { HelloWave } from "@/components/HelloWave";
 import { ThemedPagination } from "@/components/ThemedPagination";
+import { Link } from "expo-router";
+import PokemonCard from "@/components/PokemonCard"; // New Component
 
 export default function HomeScreen() {
   const [apiData, setApiData] = useState([]);
@@ -19,7 +21,6 @@ export default function HomeScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch the first 50 Pokémon
         let response = await fetch(
           `https://pokeapi.co/api/v2/pokemon?limit=${initialFetchLimit}`
         );
@@ -36,7 +37,6 @@ export default function HomeScreen() {
         setLoading(false);
         setCurrentPageData(firstBatchDetails.slice(0, itemsPerPage));
 
-        // Fetch the remaining Pokémon in the background
         response = await fetch(
           `https://pokeapi.co/api/v2/pokemon?offset=${initialFetchLimit}&limit=${
             1000 - initialFetchLimit
@@ -97,15 +97,7 @@ export default function HomeScreen() {
       ) : (
         <ThemedView style={styles.cardsContainer}>
           {currentPageData.map((data, index) => (
-            <ThemedView key={index} style={styles.card}>
-              <ThemedText>{data.name}</ThemedText>
-              <ThemedText>Height: {data.height}</ThemedText>
-              <ThemedText>Weight: {data.weight}</ThemedText>
-              <Image
-                source={{ uri: data.sprites.front_default }}
-                style={styles.pokemonImage}
-              />
-            </ThemedView>
+            <PokemonCard key={index} data={data} />
           ))}
         </ThemedView>
       )}
@@ -132,14 +124,6 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "center",
   },
-  card: {
-    width: "45%",
-    margin: 8,
-    padding: 16,
-    borderWidth: 1,
-    borderRadius: 8,
-    alignItems: "center",
-  },
   reactLogo: {
     height: 250,
     width: 290,
@@ -154,10 +138,5 @@ const styles = StyleSheet.create({
   paginationContainer: {
     marginTop: 16,
     alignItems: "center",
-  },
-  pokemonImage: {
-    width: 100,
-    height: 100,
-    marginTop: 8,
   },
 });
