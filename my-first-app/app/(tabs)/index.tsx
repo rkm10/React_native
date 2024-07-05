@@ -16,6 +16,7 @@ export default function HomeScreen() {
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
   const initialFetchLimit = 50;
+  const secondFetchLimit = 100;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,7 +39,7 @@ export default function HomeScreen() {
 
         response = await fetch(
           `https://pokeapi.co/api/v2/pokemon?offset=${initialFetchLimit}&limit=${
-            1000 - initialFetchLimit
+            secondFetchLimit - initialFetchLimit
           }`
         );
         json = await response.json();
