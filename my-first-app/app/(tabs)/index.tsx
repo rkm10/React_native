@@ -71,6 +71,7 @@ export default function HomeScreen() {
   const handlePageChange = (value) => {
     setPage(value);
   };
+  New@expo
 
   return (
     <ParallaxScrollView
