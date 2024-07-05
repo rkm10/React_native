@@ -100,10 +100,12 @@ export function ThemedPagination({
 
       {/* Dropdown Icon and Page Info */}
       <TouchableOpacity onPress={toggleDropdown} style={styles.pageInfo}>
-        <Text style={[{ color: textColor }, styles.text]}>
-          Page {currentPage} of {totalPages}
+        <Text style={[{ color: textColor, alignItems: "center" }, styles.text]}>
+          Page {currentPage}
+          <MaterialIcons name="arrow-drop-down" size={20} color={textColor} />
+          of {totalPages}
         </Text>
-        <MaterialIcons name="arrow-drop-down" size={24} color={textColor} />
+        {/* <MaterialIcons name="arrow-drop-down" size={24} color={textColor} /> */}
       </TouchableOpacity>
 
       {/* Modal */}
@@ -196,6 +198,7 @@ const styles = StyleSheet.create({
     // transform: [{ translateX: -20 }, { translateY: 150 }],
     borderRadius: 4,
     maxHeight: 150,
+    alignItems: "center",
     width: 50, // Adjust width as needed
   },
   dropdownItem: {
